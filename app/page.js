@@ -1,4 +1,19 @@
+"use client";
+
+import { useState } from "react";
+
 export default function Home() {
+  const [selectedFileName, setSelectedFileName] = useState("");
+
+  function handleFileChange(event) {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFileName(file.name);
+    } else {
+      setSelectedFileName("");
+    }
+  }
+
   return (
     <main
       style={{
@@ -23,7 +38,7 @@ export default function Home() {
         تبدیل عکس به ویدیو با هوش مصنوعی – نسخه آزمایشی
       </p>
 
-      <button
+      <label
         style={{
           padding: "14px 32px",
           fontSize: "18px",
@@ -32,11 +47,25 @@ export default function Home() {
           cursor: "pointer",
           background: "#ff006e",
           color: "white",
-          transition: "0.3s"
+          transition: "0.3s",
+          display: "inline-block",
+          marginBottom: "16px"
         }}
       >
-        آپلود تصویر
-      </button>
+        انتخاب تصویر
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          style={{ display: "none" }}
+        />
+      </label>
+
+      {selectedFileName && (
+        <p style={{ fontSize: "14px", opacity: 0.8 }}>
+          فایل انتخاب‌شده: {selectedFileName}
+        </p>
+      )}
     </main>
   );
-          }
+}
