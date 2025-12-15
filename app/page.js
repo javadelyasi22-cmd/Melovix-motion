@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const [selectedFileName, setSelectedFileName] = useState("");
   const fileInputRef = useRef(null);
   const router = useRouter();
 
@@ -17,20 +16,10 @@ export default function Home() {
   function handleFileChange(event) {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedFileName(file.name); // فقط state را آپدیت می‌کنیم
+      // ✅ انتقال به صفحهٔ پردازش همراه با اسم فایل
+      router.push(`/process?file=${encodeURIComponent(file.name)}`);
     }
   }
-
-  // ✅ انتقال بعد از اینکه state پایدار شد
-  useEffect(() => {
-    if (selectedFileName) {
-      const timer = setTimeout(() => {
-        router.push("/process");
-      }, 500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [selectedFileName, router]);
 
   return (
     <main
@@ -84,12 +73,6 @@ export default function Home() {
           pointerEvents: "none"
         }}
       />
-
-      {selectedFileName && (
-        <p style={{ fontSize: "14px", opacity: 0.8 }}>
-          فایل انتخاب‌شده: {selectedFileName}
-        </p>
-      )}
     </main>
   );
           }
