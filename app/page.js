@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [selectedFileName, setSelectedFileName] = useState("");
   const fileInputRef = useRef(null);
+  const router = useRouter();
 
   function handleButtonClick() {
     if (fileInputRef.current) {
-      fileInputRef.current.click(); // باز کردن مستقیم input
+      fileInputRef.current.click();
     }
   }
 
@@ -16,6 +18,11 @@ export default function Home() {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFileName(file.name);
+
+      // ✅ انتقال صحیح با Next.js Router
+      setTimeout(() => {
+        router.push("/process");
+      }, 300);
     } else {
       setSelectedFileName("");
     }
@@ -45,7 +52,6 @@ export default function Home() {
         تبدیل عکس به ویدیو با هوش مصنوعی – نسخه آزمایشی
       </p>
 
-      {/* دکمه واقعی */}
       <button
         onClick={handleButtonClick}
         style={{
@@ -63,7 +69,6 @@ export default function Home() {
         انتخاب تصویر
       </button>
 
-      {/* input واقعی اما فقط مخفی با opacity */}
       <input
         type="file"
         accept="image/*"
@@ -83,4 +88,4 @@ export default function Home() {
       )}
     </main>
   );
-          }
+      }
