@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -17,16 +17,20 @@ export default function Home() {
   function handleFileChange(event) {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedFileName(file.name);
-
-      // ✅ انتقال صحیح با Next.js Router
-      setTimeout(() => {
-        router.push("/process");
-      }, 300);
-    } else {
-      setSelectedFileName("");
+      setSelectedFileName(file.name); // فقط state را آپدیت می‌کنیم
     }
   }
+
+  // ✅ انتقال بعد از اینکه state پایدار شد
+  useEffect(() => {
+    if (selectedFileName) {
+      const timer = setTimeout(() => {
+        router.push("/process");
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [selectedFileName, router]);
 
   return (
     <main
@@ -88,4 +92,4 @@ export default function Home() {
       )}
     </main>
   );
-      }
+          }
