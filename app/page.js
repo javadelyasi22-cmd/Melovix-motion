@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function Home() {
   const [selectedFileName, setSelectedFileName] = useState("");
+  const fileInputRef = useRef(null);
+
+  function handleButtonClick() {
+    if (fileInputRef.current) {
+      fileInputRef.current.click(); // باز کردن مستقیم input
+    }
+  }
 
   function handleFileChange(event) {
     const file = event.target.files?.[0];
@@ -38,7 +45,9 @@ export default function Home() {
         تبدیل عکس به ویدیو با هوش مصنوعی – نسخه آزمایشی
       </p>
 
-      <label
+      {/* دکمه واقعی */}
+      <button
+        onClick={handleButtonClick}
         style={{
           padding: "14px 32px",
           fontSize: "18px",
@@ -48,18 +57,24 @@ export default function Home() {
           background: "#ff006e",
           color: "white",
           transition: "0.3s",
-          display: "inline-block",
           marginBottom: "16px"
         }}
       >
         انتخاب تصویر
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-        />
-      </label>
+      </button>
+
+      {/* input واقعی اما فقط مخفی با opacity */}
+      <input
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{
+          opacity: 0,
+          position: "absolute",
+          pointerEvents: "none"
+        }}
+      />
 
       {selectedFileName && (
         <p style={{ fontSize: "14px", opacity: 0.8 }}>
@@ -68,4 +83,4 @@ export default function Home() {
       )}
     </main>
   );
-}
+          }
